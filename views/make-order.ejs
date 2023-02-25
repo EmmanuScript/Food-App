@@ -1,0 +1,211 @@
+<%- include('partials/header'); -%>
+
+    <div id="userName" style="color: white;">
+        <%=user.name%>
+    </div>
+
+
+    <form action="">
+        <h2>Order for Food</h2>
+        <label for="restaurant">Restaurant</label>
+        <select name="restaurant" id="restaurant-list">
+            <option value="null">-----</option>
+        </select>
+
+        <label for="food">Food</label>
+        <select name="drink" id="food-list">
+            <option value="null">-----</option>
+        </select>
+
+        <label for="drink">Drink</label>
+        <select name="drink" id="drink-list">
+            <option value="null">-----</option>
+        </select>
+
+        <button id="order-btn">Order</button>
+    </form>
+
+    <div id="bro"></div>
+
+    <form id="get">
+        <button>Get Orders</button>
+        <div id="order"></div>
+    </form>
+
+    <div><button id="edit-order">Edit Orders</button></div>
+
+    <script>
+
+        window.addEventListener('load', (e) => {
+            let container = []
+            const res = fetch('/get-menu')
+                .then(res => res.json())
+                .then(data => {
+
+                    data.forEach((item) => {
+                        container.push(item.restaurant)
+                    })
+
+                    const restaurantList = document.querySelector('#restaurant-list')
+                    let contain = []
+                    for (let a = 0; a < container.length; a++) {
+                        if (contain.indexOf(container[a]) === -1) {
+                            contain.push(container[a])
+                        }
+                    }
+                    for (let b = 0; b < contain.length; b++) {
+                        const option = document.createElement('option')
+                        option.value = contain[b]
+                        option.text = contain[b]
+                        restaurantList.appendChild(option)
+                    }
+                })
+
+        })
+
+
+        const restaurantList = document.getElementById('restaurant-list')
+
+        restaurantList.addEventListener('change', (e) => {
+            e.preventDefault()
+            const foodList = document.getElementById('food-list');
+            const option = document.createElement('option')
+            foodList.textContent = ``
+
+
+            let restName = restaurantList.options[restaurantList.selectedIndex].text
+            let foodContainer = []
+            const res = fetch('/get-menu')
+                .then(res => res.json())
+                .then(data => {
+                    data.forEach(item => {
+                        if (item.restaurant === restName) {
+                            foodContainer.push(item.food)
+                        }
+                    })
+                    const foodList = document.getElementById('food-list')
+                    let contain = []
+                    for (let m = 0; m < foodContainer.length; m++) {
+                        if (contain.indexOf(foodContainer[m]) === -1) {
+                            contain.push(foodContainer[m])
+                        }
+                    }
+                    for (let n = 0; n < contain.length; n++) {
+                        const option = document.createElement('option')
+                        option.value = contain[n]
+                        option.text = contain[n]
+                        foodList.appendChild(option)
+                    }
+                })
+        })
+
+
+
+        restaurantList.addEventListener('change', (e) => {
+            e.preventDefault()
+            const drinkList = document.getElementById('drink-list');
+            const option = document.createElement('option')
+            drinkList.textContent = ``
+
+
+            let restName = restaurantList.options[restaurantList.selectedIndex].text
+            let drinkContainer = []
+            const res = fetch('/get-menu')
+                .then(res => res.json())
+                .then(data => {
+                    data.forEach(item => {
+                        if (item.restaurant === restName) {
+                            drinkContainer.push(item.drink)
+                        }
+                    })
+                    let contain = []
+                    for (let m = 0; m < drinkContainer.length; m++) {
+                        if (contain.indexOf(drinkContainer[m]) === -1) {
+                            contain.push(drinkContainer[m])
+                        }
+                    }
+                    const drinkList = document.getElementById('drink-list')
+                    for (let n = 0; n < contain.length; n++) {
+                        if (contain[n] !== '') {
+                            const option = document.createElement('option')
+                            option.value = contain[n]
+                            option.text = contain[n]
+                            drinkList.appendChild(option)
+                        }
+                    }
+
+                })
+        })
+
+        const orderBtn = document.querySelector('#order-btn')
+
+        orderBtn.addEventListener('click', async (e) => {
+            e.preventDefault();
+
+            const restaurant = document.getElementById('restaurant-list').value
+            const food = document.getElementById('food-list').value
+            const drink = document.getElementById('drink-list').value
+            const name = document.getElementById("userName").textContent.trim()
+
+            try {
+                const res = await fetch('/make-order', {
+                    method: 'POST',
+                    body: JSON.stringify({ restaurant, food, drink, name }),
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                const data = await res.json()
+            } catch (e) {
+
+            }
+            const foodList = document.getElementById('food-list')
+            const drinkList = document.getElementById('drink-list');
+            drinkList.textContent = ``
+            foodList.textContent = ``
+        })
+
+
+        const orderForm = document.getElementById('get')
+
+        orderForm.addEventListener('submit', async (e) => {
+            e.preventDefault()
+
+            const name = document.getElementById("userName").textContent.trim()
+
+            let container = []
+
+            const order = document.getElementById('order')
+            order.textContent = ''
+
+            const res = await fetch('/get-orders')
+                .then(res => res.json())
+                .then(data => {
+                    data.forEach(menu => {
+                        container.push(`${menu.restaurant} | ${menu.food} | ${menu.drink}`)
+                    })
+
+                }
+                )
+
+
+
+            container.forEach((meal) => {
+                const meals = document.createElement('p')
+                const textnode = document.createTextNode(meal)
+                meals.appendChild(textnode)
+                meals.classList.add('enlarge')
+                order.appendChild(meals)
+            })
+        })
+
+        const editBtn = document.querySelector('#edit-order')
+
+
+        editBtn.addEventListener('click', (e) => {
+            e.preventDefault()
+
+            location.assign('/edit-order')
+        })
+
+    </script>
+
+    <%- include('partials/footer'); -%>

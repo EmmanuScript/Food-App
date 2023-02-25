@@ -1,0 +1,162 @@
+
+/* google fonts */
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
+
+*{
+  margin: 0;
+  padding:0;
+}
+
+body, html { min-height: 100%; }
+
+body {
+	color: white;
+	background: url('/img/flat.jpg') center no-repeat;
+	background-size: cover;
+	background-color: #000;
+}
+
+h1, h2, h3, h4, ul, a, p, input, select, label, button, div, footer{
+  font-family: 'Quicksand', sans-serif;
+}
+
+li{
+  color: black;
+}
+
+ul{
+  list-style-type: none;
+}
+
+a{
+  text-decoration: none;
+}
+nav{
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 10px;
+  padding: 10px;
+  background-color: #ffd;
+}
+nav ul{
+  display: flex;
+  align-items: center;
+}
+nav li{
+  margin-left: 20px;
+}
+nav li a{
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 0.8em;
+  display: block;
+  padding: 10px 16px;
+  letter-spacing: 2px;
+}
+.btn{
+  border-radius: 36px;
+  background: #FEE996;
+}
+
+button{
+  margin-top: 30px;
+  border-radius: 36px;
+  background: #FEE996;
+  border:0;
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 0.8em;
+  display: block;
+  padding: 10px 16px;
+  letter-spacing: 2px;
+}
+
+header{
+  align-items: center;
+  text-align: center;
+}
+header img{
+  width: 250px;
+  margin-right: 40px;
+}
+header h2{
+  font-size: 3em;
+  margin-bottom: 10px;
+}
+header h3{
+  font-size: 1.6em;
+  margin-bottom: 10px;
+  margin-left: 2px;
+  color: #999;
+}
+header .btn{
+  margin-top: 20px;
+  padding: 12px 18px;
+  text-transform: uppercase;
+  font-weight: bold;
+  display: inline-block;
+  font-size: 0.8em;
+}
+
+#container{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  background-color: rgba(228,184,22,0.3);
+  margin: 0 20px;
+}
+
+.card{
+  width: 30%;
+  padding: 10px;
+}
+
+#bg-img{
+  width: 100px;
+  height: 2rem;
+  padding: 0;
+  margin: 0;
+  
+}
+
+.card-img-top{
+  width: 100%;
+  max-height: 400px;
+  min-height: 350px;
+}
+
+.headings p {
+  font-size: 20px;
+  font-style: italic;
+}
+
+.btn{
+  margin-top: 20px;
+  padding: 12px 18px;
+  text-transform: uppercase;
+  font-weight: bold;
+  display: inline-block;
+  font-size: 0.8em;
+}
+
+.btn-primary{
+  margin-left: auto;
+}
+
+#footer{
+  position: fixed;
+  bottom: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  background-color: white;
+  padding: 5px 10px;
+  border: solid;
+  width: 100%;
+  color: black;
+}
+
+#footer>div:nth-child(2){
+  padding-right: 20px;  
+}

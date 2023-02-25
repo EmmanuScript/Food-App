@@ -1,0 +1,89 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BG Foods</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <nav>
+      <h1> <a href="/">BG FOODS</a></h1>
+      <ul>
+        <li><a href="/login" class="btn">Log In</a></li>
+        <li><a href="/signup">Sign Up</a></li>
+      </ul>
+    </nav>
+
+<form action="">
+    <h2>Sign Up</h2>
+    <label for="name">Full Name</label>
+    <input type="text" name="name" required>
+    <div class="error name"></div>
+    <label for="email">Email</label>
+    <input type="text" name="email" required>
+    <div class="error email"></div>
+    <label for="password">Password</label>
+    <input type="password" name="password" required>
+    <div class="error password"></div>
+    <label for="role">Role (Default is user)</label>
+    <select name="states">
+        <option value="Admin">Admin</option>
+        <option value="User">User</option>
+      </select>
+    <div class="error roles"></div>
+    <button>Sign Up</button>
+   
+
+</form>
+
+<script>
+    const form = document.querySelector('form')
+    const emailError = document.querySelector('.email.error')
+    const passwordError = document.querySelector('.password.error')
+    const nameError = document.querySelector('.name.error')
+    const roleError = document.querySelector('.roles.error')
+
+    form.addEventListener('submit', async (e)=>{
+        e.preventDefault();
+        //reset errors
+        emailError.textContent = ''
+        passwordError.textContent = ''
+        nameError.textContent = ''
+        roleError.textContent = ''
+
+        //get values from html to use
+
+        const email = form.email.value
+        const password = form.password.value
+        const name = form.name.value
+        const roles = form.states.value
+        
+        try{
+            const res = await fetch('/signup', {
+                method: 'POST',
+                body: JSON.stringify({ email, password, name, roles}),
+                headers: { 'Content-Type': 'application/json'}
+            });
+            const data = await res.json()
+            if(data.message === 'Admin Password Needed'){
+                roleError.textContent = 'Admin Password Needed'
+            }
+            if(data.errors){
+                emailError.textContent = data.errors.email
+                passwordError.textContent = data.errors.password
+            }
+            if(data.user){
+                if(data.roles === 'User'){
+                    location.assign('/home')
+                }
+                if(data.roles === 'Admin'){
+                    location.assign('/admin-home')
+                }
+            }
+
+        }catch(e){
+
+        }
+          })
+</script>
+<%- include('partials/footer'); -%>

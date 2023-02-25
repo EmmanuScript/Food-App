@@ -1,0 +1,154 @@
+<%- include('partials/header'); -%>
+
+
+<div id="userId" style="color: white;"> <%=user._id%> </div>
+
+<fieldset id="checkOrders">
+<legend>
+    <h3>Edit Menu by Selecting the Id</h3>
+</legend>
+<form id="get">
+    <button>Get Menu</button>
+    <div id="menu"></div>
+</form>
+</fieldset>
+
+
+<form id="edit-menu" action="">
+    <h2>Edit Menu</h2>
+    <label for="orderId">insert order id here:</label>
+    <input type="text" name="orderId" required>
+
+    <label for="restaurant">Restaurant</label>
+    <input type="text" name="restaurant" >
+
+    <label for="food">Food</label>
+    <input type="text" name="food">
+
+    <label for="drink">Drink</label>
+    <input type="text" name="drink">
+
+    <button>Update</button>
+    <button id="delete-btn">Delete</button>
+</form>
+
+<form id="delete-menu" action="">
+    <h2>Delete Entire Menu</h2>
+    <button id="delete-all">Delete</button>
+</form>
+
+
+
+<script>
+    const id = document.querySelector('#userId').textContent
+
+    const menuForm = document.getElementById('get')
+
+    menuForm.addEventListener('submit', async (e)=>{
+        e.preventDefault()
+
+
+        let container = []
+
+        const menu = document.getElementById('menu')
+        menu.textContent = ''
+        console.log(id)
+            const res = await fetch('/get-menu')
+            .then(res => res.json())
+            .then(data=> 
+            {
+                data.forEach(menu=>{
+                    container.push(`${menu._id} | ${menu.restaurant} | ${menu.food} | ${menu.drink}`)
+                })
+                // console.log(data)
+            }
+            )
+       
+            container.forEach((meal)=> {
+            console.log(meal)
+            const meals = document.createElement('p')
+            const textnode = document.createTextNode(meal)
+            meals.appendChild(textnode)
+  
+            menu.appendChild(meals)
+            meals.classList.add('enlarge')
+        })
+            })
+
+    const editForm = document.querySelector('#edit-menu')
+
+    editForm.addEventListener('submit', (e)=>{
+        e.preventDefault()
+    
+        const restaurant = editForm.restaurant.value
+        const food = editForm.food.value
+        const drink = editForm.drink.value
+        const id = editForm.orderId.value
+        try{
+            const res = fetch('/edit-menu', {
+                method: 'PATCH',
+                body: JSON.stringify({restaurant, food, drink, id}),
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            }).then((res)=> res.json())
+            .then((data)=> console.log(data))
+        }catch(e){
+            console.log(e)
+        }
+
+        restaurant.textContent = ``
+        food.textContent = ``
+        drink.textContent = ``
+        id.textContent = ``
+    })
+
+    const deleteBtn = document.querySelector('#delete-btn')
+
+    deleteBtn.addEventListener('click', (e)=>{
+        e.preventDefault()
+
+        const id = editForm.orderId.value
+
+        try{
+            const res = fetch('/delete-menu', {
+                method: 'DELETE',
+                body: JSON.stringify({id}),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then((res) => res.json())
+            .then((data)=>console.log(data))
+        }catch(e){
+            console.log(e)
+        }
+    })
+
+    const deleteAll = document.querySelector('#delete-all')
+
+    deleteAll.addEventListener('click', (e)=>{
+        e.preventDefault()
+
+        const userId = document.querySelector('#userId').textContent
+        let holder = []
+        holder.push(fatId)
+        let id = holder[0].trim()
+     
+
+        try{
+            const res = fetch('/delete-menus', {
+                method: 'DELETE',
+                body: JSON.stringify({id}),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then((res) => res.json())
+            .then((data)=>console.log(data))
+        }catch(e){
+            console.log(e)
+        }
+    })
+</script>
+
+
+<%- include('partials/footer'); -%>

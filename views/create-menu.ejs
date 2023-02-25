@@ -1,0 +1,97 @@
+<%- include('partials/header'); -%>
+
+
+
+<div id="userName" style="color: white;"> <%=user.name%> </div>
+
+
+<form>
+    <h2>Create Menu</h2>
+    <label for="restaurant">Restaurant</label>
+    <input type="text" name="restaurant" id="restaurant-list" required>
+
+    <label for="food">Food</label>
+    <input type="text" name="food" id="food-list" required>
+
+    <label for="drink">Drink</label>
+    <input type="text" name="drink" id="drink-list" required>
+
+    <button id="order-btn">Add Menu</button>
+</form>
+
+<form id="get">
+    <button>Get Menu</button>
+    <div id="menu"></div>
+</form>
+
+<div><button id="edit-menu">Edit Menu</button></div>
+
+<script>
+    const orderBtn = document.querySelector('#order-btn')
+
+    orderBtn.addEventListener('click', async (e)=>{
+        e.preventDefault();
+
+        const restaurant = document.getElementById('restaurant-list').value
+        const food = document.getElementById('food-list').value
+        const drink = document.getElementById('drink-list').value
+        const name = document.querySelector('#userName').textContent.trim()
+        
+        try{
+            const res = await fetch('/menu-post', {
+                method: 'POST',
+                body: JSON.stringify({ restaurant, food, drink, name}),
+                headers: { 'Content-Type': 'application/json'}
+            });
+            const data = await res.json()
+            console.log(data)
+            if(data.errors){
+                console.log(data.errors)
+            }
+            if(data.menu){
+                console.log(data.menu)
+            }
+
+        }catch(e){
+
+        }
+          })
+
+    const menuForm = document.getElementById('get')
+
+    menuForm.addEventListener('submit', async (e)=>{
+        e.preventDefault()
+
+        let container = []
+
+        const menu = document.getElementById('menu')
+        menu.textContent = ''
+        
+        const res = await fetch('/get-menu')
+        .then(res => res.json())
+        .then(data=> 
+        {
+            data.forEach(menu=>{
+                container.push(`${menu.restaurant} | ${menu.food} | ${menu.drink}`)
+            })
+        }
+        )        
+
+        container.forEach((meal)=> {
+            const meals = document.createElement('p')
+            const textnode = document.createTextNode(meal)
+            meals.appendChild(textnode)
+  
+            menu.appendChild(meals)
+            meals.classList.add('enlarge')
+        })
+        })
+        const editBtn = document.querySelector('#edit-menu')
+        editBtn.addEventListener('click', (e)=>{
+            e.preventDefault()
+
+            location.assign('/edit-menu')
+    })
+</script>
+
+<%- include('partials/footer'); -%>
