@@ -30,7 +30,7 @@ mongoose.connect(dbURI, {
 // routes
 app.get("*", checkUser);
 app.get("/", (req, res) => {
-  res.render("index");
+  res.render("home");
 });
 app.get("/home", requireAuth, checkUser, (req, res) => {
   res.render("home");

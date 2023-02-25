@@ -1,34 +1,51 @@
 <%- include('partials/header'); -%>
 
-<div id="userId" style="color: white;"> <%=user._id%> </div>
+    <div id="userId" style="color: white;">
+        <%=user._id%>
+    </div>
+    <% if (!data) {%>
+        <h4>No orders available</h4>
+        <%} else { %>
+            <%if(data.length>0){%>
+                <table>
+                    <tbody>
+                        <tr>
+                            <th>Name</th>
+                            <th>User ID</th>
+                            <th>Restaurant</th>
+                            <th>Drink</th>
+                            <th>Food</th>
+                        </tr>
+                        <%for(var a=0; a< data.length; a++ ){%>
 
-<%if(data.length>0){%>
-    <table>
-        <tbody>
-            <tr>
-                <th>Name</th>
-                <th>User ID</th>
-                <th>Restaurant</th>
-                <th>Drink</th>
-                <th>Food</th>
-            </tr>
-    <%for(var a=0; a< data.length; a++ ){%>
-        
-        <tr>
-            <td><%=data[a].owner%></td>
-            <td><%=data[a]._id%></td>
-            <td><%=data[a].restaurant%></td>
-            <td><%=data[a].drink%></td>
-            <td><%=data[a].food%></td>
-        </tr>
-        <%}%>
-    </tbody>
-    </table>
-<%}%>
+                            <tr>
+                                <td>
+                                    <%=data[a].owner%>
+                                </td>
+                                <td>
+                                    <%=data[a]._id%>
+                                </td>
+                                <td>
+                                    <%=data[a].restaurant%>
+                                </td>
+                                <td>
+                                    <%=data[a].drink%>
+                                </td>
+                                <td>
+                                    <%=data[a].food%>
+                                </td>
+                            </tr>
+                            <%}%>
+                    </tbody>
+                </table>
+                <%}%>
 
-<form action="/export" method="POST">
-    <button type="submit">Export to Excel</button>
-</form>
+                    <%} %>
 
 
-<%- include('partials/footer'); -%>
+                        <form action="/export" method="POST">
+                            <button type="submit">Export to Excel</button>
+                        </form>
+
+
+                        <%- include('partials/footer'); -%>
