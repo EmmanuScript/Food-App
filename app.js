@@ -56,8 +56,11 @@ app.get("/export", requireAuth, authRole, (req, res) => res.download(down));
 app.use(authRoutes);
 app.use(adminRoutes);
 
-app.listen(port, () => {
-  console.log("server is tunning on port " + port + "...");
-});
+// Only start server if not in test mode
+if (process.env.NODE_ENV !== "test") {
+  app.listen(port, () => {
+    console.log("server is tunning on port " + port + "...");
+  });
+}
 
 module.exports = app;
